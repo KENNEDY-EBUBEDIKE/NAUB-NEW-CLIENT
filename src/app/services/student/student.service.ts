@@ -1,0 +1,43 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, Subject, tap } from 'rxjs';
+const SERVER_URL = 'http://127.0.0.1:8000';
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+}; //don't use for POST requests
+
+
+
+@Injectable({
+  providedIn: 'root'
+})
+
+export class StudentService {
+
+  private _refreshRequired = new Subject<void>();
+
+  get Refreshrequired(){
+    return this._refreshRequired;
+  }
+
+  constructor(private http: HttpClient) { }
+
+  getAllStudents(): Observable<any> {
+    return this.http.get(SERVER_URL + '/students/students-database', httpOptions);
+  }
+
+  getStudent(id: number): Observable<any> {
+    return this.http.get(SERVER_URL + '/students/student-profile/' + id, httpOptions);
+  }
+
+  registerStudent(formData:any): Observable<any>{
+    return this.http.post<any>(
+      SERVER_URL + "/students/register-student/", formData).pipe(
+        tap(()=>{
+          this._refreshRequired.next()
+        })
+    )
+  }
+
+
+}
