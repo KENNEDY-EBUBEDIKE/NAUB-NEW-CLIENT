@@ -18,18 +18,22 @@
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-                    <img class="profile-user-img img-responsive img-circle" src="../../../../assets/dist/img/user4-128x128.jpg" alt="User profile picture">
+                    <div>
+                      <img class="profile-user-img img-responsive img-circle" (click)="triggerUpload()" src="{{student.photo? server_url + student.photo:'../../../../assets/dist/img/user4-128x128.jpg'}}" style="width: 400px; height: 380px" alt="User profile picture">
+                        <input type="file" id="photoUpload" (change)="photoUpload($event)" style="display: none" >
+                    </div>
 
-                    <h3 style="font-size:40px;" class="profile-username text-center">{{student.surname}} {{student.first_name}}</h3>
 
-                    <p class="text-muted text-center" style="font-size: 20px">{{student.other_name}}</p>
+                    <h3 style="font-size:40px;" class="profile-username text-center">{{student?.surname? student.surname:''}} {{student?.first_name? student.first_name:''}}</h3>
+
+                    <p class="text-muted text-center" style="font-size: 20px">{{student?.other_name? student.other_name:''}}</p>
 
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
-                            <b>Matric Number</b> <a class="pull-right">{{student.matric_number}}</a>
+                            <b>Matric Number</b> <a class="pull-right">{{student?.matric_number? student.matric_number:''}}</a>
                         </li>
                         <li class="list-group-item">
-                            <b>RFID CODE</b> <a class="pull-right">{{student.rfid_code}}</a>
+                            <b>RFID CODE</b> <a class="pull-right">{{student?.rfid_code? student.rfid_code:''}}</a>
                         </li>
                         <li class="list-group-item">
                             <b>Last Scan</b> <a class="pull-right">1st JUNE, 2022</a>
@@ -43,43 +47,6 @@
                 </div>
                 <!-- /.box-body -->
             </div>
-            <!-- /.box -->
-
-            <!-- About Me Box -->
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <h3 class="box-title text-center">Academic Data</h3>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <strong><i class="fa fa-building margin-r-5"></i> Faculty</strong>
-                    <p class="text-muted text-center">{{student.faculty}}</p>
-                    <hr>
-
-                    <strong><i class="fa fa-dashboard margin-r-5"></i> Department</strong>
-                    <p class="text-muted text-center">{{student.department}}</p>
-                    <hr>
-
-                    <strong><i class="fa fa-database margin-r-5"></i> Session </strong>
-                    <p class="text-muted text-center">{{student.admission_session}}</p>
-                    <hr>
-
-                    <strong><i class="fa fa-level-up margin-r-5"></i> Level</strong>
-                    <p class="text-muted text-center">{{student.level}}</p>
-                    <hr>
-
-                    <strong><i class="fa fa-pencil margin-r-5"></i> Skills</strong>
-                    <p>
-                        <span class="label label-danger">UI Design</span>
-                        <span class="label label-success">Coding</span>
-                        <span class="label label-info">Javascript</span>
-                        <span class="label label-warning">PHP</span>
-                        <span class="label label-primary">Node.js</span>
-                    </p>
-                </div>
-                <!-- /.box-body -->
-            </div>
-            <!-- /.box -->
         </div>
         <!-- /.col -->
         <div class="col-md-9">
@@ -291,51 +258,55 @@
                     <!-- /.tab-pane -->
 
                     <div class="tab-pane" id="edit_profile">
-                        <form class="form-horizontal">
+                        <form (ngSubmit)="editStudentProfile()" [formGroup]="editStudentProfileForm" enctype="multipart/form-data" class="form-horizontal">
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Name</label>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control" id="surname" placeholder="surname">
+                                    <input type="text" formControlName="surname" class="form-control" id="surname" placeholder="surname">
                                 </div>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control" id="first_name" placeholder="First Name">
+                                    <input type="text" formControlName="first_name" class="form-control" id="first_name" placeholder="First Name">
                                 </div>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control" id="other_name" placeholder="Other Name">
+                                    <input type="text" formControlName="other_name" class="form-control" id="other_name" placeholder="Other Name">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Basic Info</label>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control" id="matric_number" placeholder="Matric Number">
+                                    <input type="text" formControlName="matric_number" class="form-control" id="matric_number" placeholder="Matric Number">
                                 </div>
                                 <div class="col-sm-3">
-                                    <input type="email" class="form-control" id="email" placeholder="Email">
+                                    <input type="email" formControlName="email" class="form-control" id="email" placeholder="Email">
                                 </div>
                                 <div class="col-sm-3">
-                                    <input type="number" class="form-control" id="phone_number" placeholder="Phone Number">
+                                    <input type="number" formControlName="phone_number" class="form-control" id="phone_number" placeholder="Phone Number">
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Academic Info</label>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control" id="faculty" placeholder="Faculty">
+                                    <input type="text" formControlName="faculty" class="form-control" id="faculty" placeholder="Faculty">
                                 </div>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control" id="department" placeholder="Department">
+                                    <input type="text" formControlName="department" class="form-control" id="department" placeholder="Department">
                                 </div>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control" id="level" placeholder="Level">
+                                    <input type="text" formControlName="level" class="form-control" id="level" placeholder="Level">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="photo" class="col-sm-2 control-label">Photo</label>
-
-                                <div class="col-sm-10">
-                                    <input type="file" id="photo" placeholder="Photo">
-                                    <p class="help-block">Max Size. 3Mb</p>
+                                <label class="col-sm-2 control-label">Bio Data</label>
+                                <div class="col-sm-3">
+                                    <input type="text" formControlName="gender" class="form-control" id="gender" placeholder="gender">
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type="text" formControlName="date_of_birth" class="form-control" id="date_of_birth" placeholder="Date Of Birth">
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type="text" formControlName="nationality" class="form-control" id="nationality" placeholder="Nationality">
                                 </div>
                             </div>
 

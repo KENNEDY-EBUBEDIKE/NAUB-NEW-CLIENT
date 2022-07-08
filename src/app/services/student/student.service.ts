@@ -15,6 +15,7 @@ const httpOptions = {
 export class StudentService {
 
   private _refreshRequired = new Subject<void>();
+  public _server_url = SERVER_URL
 
   get Refreshrequired(){
     return this._refreshRequired;
@@ -39,5 +40,12 @@ export class StudentService {
     )
   }
 
-
+  editStudentProfile(formData:any): Observable<any>{
+    return this.http.patch<any>(
+      SERVER_URL + "/students/edit-student-profile/", formData).pipe(
+        tap(()=>{
+          this._refreshRequired.next()
+        })
+    )
+  }
 }
