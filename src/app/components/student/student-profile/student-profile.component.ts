@@ -22,17 +22,23 @@ export class StudentProfileComponent implements OnInit {
   title: string = "NAUB | Student Profile";
   server_url = this.student_service._server_url
   student!: any;
-
-
-
   editStudentProfileForm!:any
+  student_id!:any
+
 
   public setTitle(newTitle: string) {
     this.titleService.setTitle(newTitle);
   }
 
   public getStudentData(){
-    this.student_service.getStudent(history.state.id).subscribe(response=>{
+    if (history.state.id){
+      this.student_id = history.state.id
+      window.localStorage.setItem("student_id", this.student_id)
+    }else{
+      this.student_id = window.localStorage.getItem("student_id")
+    }
+
+    this.student_service.getStudent(this.student_id).subscribe(response=>{
       if(response.success){
         this.student = response.student
         this.editStudentProfileForm = new FormGroup({
@@ -62,7 +68,6 @@ export class StudentProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.location.getState())
     this.getStudentData()
   }
 
@@ -95,16 +100,35 @@ export class StudentProfileComponent implements OnInit {
     formData.append('pk', this.student.id)
     formData.append('photo', <File>event.target.files[0])
     this.student_service.editStudentProfile(formData).subscribe(response=>{
-      console.log(response)
-      this.getStudentData()
+      if (response.success){
+        this.getStudentData()
+      }
     })
-    // this.editStudentProfileForm.patchValue({photo: <File>event.target.files[0]})
-    // this.editStudentProfileForm.get('photo')?.updateValueAndValidity()
   }
 
   public triggerUpload(){
     // @ts-ignore
     document.getElementById("photoUpload").click()
+  }
+
+  public flagStudent(event:any, reason:any){
+    event.preventDefault()
+    if(reason === 'selection'){
+      // @ts-ignore
+      let e = document.getElementById("reason");
+      // @ts-ignore
+      reason = e.options[e.selectedIndex].value;
+    }
+    let formData: any = new FormData()
+    formData.append('pk', this.student.id)
+    formData.append('is_flaged', reason)
+    this.student_service.editStudentProfile(formData).subscribe(response=>{
+      if (response.success){
+        // @ts-ignore
+        $('#flagStudentModal').modal('hide');
+        this.getStudentData()
+      }
+    })
   }
 
 }
