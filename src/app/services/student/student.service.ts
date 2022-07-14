@@ -48,4 +48,14 @@ export class StudentService {
         })
     )
   }
+
+
+  update_rfid_code(rfid_code:any): Observable<any>{
+    return this.http.patch<any>(
+      SERVER_URL + "/students/update-rfid-code/", rfid_code).pipe(
+        tap(()=>{
+          this._refreshRequired.next()
+        })
+    )
+  }
 }

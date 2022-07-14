@@ -3,14 +3,26 @@
         User Profile
       </h1>
     <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">Examples</a></li>
+        <li><a routerLink="/base/dashboard" href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a routerLink="/base/students-database" href="#">Students' Database</a></li>
         <li class="active">User profile</li>
     </ol>
 </section>
 
 
 <section class="content">
+
+  <div class="alert alert-danger alert-dismissible" hidden>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <h4><i class="icon fa fa-ban"></i> Error!</h4>
+    {{responseMessage}}
+  </div>
+
+  <div class="alert alert-success alert-dismissible" hidden>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <h4><i class="icon fa fa-ban"></i> Successful!</h4>
+    {{responseMessage}}
+  </div>
 
     <div class="row">
         <div class="col-md-3">
@@ -19,7 +31,7 @@
             <div class="box box-primary">
                 <div class="box-body box-profile" >
                     <div [ngClass]="{'bg-red': student.is_flaged }">
-                      <img class="profile-user-img img-responsive img-circle" (click)="triggerUpload()" src="{{student?.photo? server_url + student.photo:'../../../../assets/dist/img/avatar.png'}}" style="width: 400px; height: 380px" alt="profile picture">
+                      <img data-toggle="tooltip" data-placement="bottom" data-html="true" title=" Click to Change Profile Image" class="profile-user-img img-responsive img-circle" (click)="triggerUpload()" src="{{student?.photo? server_url + student.photo:'../../../../assets/dist/img/avatar.png'}}" style="width: 400px; height: 380px" alt="profile picture">
                         <input type="file" id="photoUpload" (change)="photoUpload($event)" style="display: none" >
                     </div>
 
@@ -36,13 +48,13 @@
                             <b>RFID CODE</b> <a class="pull-right">{{student?.rfid_code? student.rfid_code:''}}</a>
                         </li>
                         <li class="list-group-item">
-                            <b>Last Scan</b> <a class="pull-right">1st JUNE, 2022</a>
+                            <b>Last Scan</b> <a class="pull-right">{{student?.last_scan? student.last_scan:''}}</a>
                         </li>
                     </ul>
                     <div class="row">
                       <a href="#" *ngIf="!student.is_flaged" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#flagStudentModal" class="btn btn-danger btn-block"><b>Flag Student</b></a>
                       <a href="#" *ngIf="student.is_flaged" (click)="flagStudent($event, '')" class="btn btn-warning btn-block"><b>UnFlag Student</b></a>
-                      <a href="#" class="btn btn-primary btn-block"><b>Update RFID Code</b></a>
+                      <a href="#" (click)="requestScanData($event)" class="btn btn-primary btn-block"><b>Update RFID Code</b></a>
                     </div>
 
                 </div>
@@ -343,3 +355,67 @@
     </div>
 
 </section>
+
+
+<script>
+      function start(){
+        event.preventDefault()
+        connectSerial()
+        let port, textEncoder, writableStreamClosed, writer;
+
+        async function connectSerial() {
+            try {
+                // Prompt user to select any serial port.
+                port = await navigator.serial.requestPort();
+                await port.open({ baudRate: "9600" });
+                listenToPort();
+
+                textEncoder = new TextEncoderStream();
+                writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
+
+                writer = textEncoder.writable.getWriter();
+            } catch (e){
+                alert(e + "Serial Connection Failed");
+            }
+        }
+        let v = "";
+        async function listenToPort() {
+            const textDecoder = new TextDecoderStream();
+            const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
+            const reader = textDecoder.readable.getReader();
+
+            // Listen to data coming from the serial device.
+            while (true) {
+                let { value, done } = await reader.read();
+                if (done) {
+                    // Allow the serial port to be closed later.
+                    //reader.releaseLock();
+                    break;
+                }
+                // value is a string.
+                let newLine = /\r\n|\r|\n/.exec(value);
+
+                if (newLine){
+                    v += value;
+                    v.replace(/\r\n|\n|\r|\s/g, "")
+                    if (!v.replace(/\r\n|\n|\r|\s/g, "").length) {
+                      console.log("string only contains whitespace (ie. spaces, tabs or line breaks)");
+                    }else {
+                        if (v.length > 3){
+                            // makeRequest(v)
+                            console.log(v)
+                        }
+                    }
+                    v = "";
+                }else{
+                    v += value;
+                }
+            }
+        }
+        async function sendSerialLine(data) {
+            await writer.write(data);
+            //await writer.releaseLock();
+        }
+
+      }
+    </script>

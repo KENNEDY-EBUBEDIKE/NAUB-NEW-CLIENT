@@ -3,18 +3,23 @@ import {StudentService} from "../../../services/student/student.service";
 import {Title} from "@angular/platform-browser";
 import {Location} from "@angular/common";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import "../../../../assets/js/serial_script.js"
 
+
+// @ts-ignore
 @Component({
   selector: 'app-student-profile',
   templateUrl: './student-profile.component.html',
   styleUrls: ['./student-profile.component.css']
 })
+
 export class StudentProfileComponent implements OnInit {
 
   constructor(
     private student_service: StudentService,
     private location: Location,
-    private titleService: Title
+    private titleService: Title,
+
   ) {
     this.setTitle(this.title);
   }
@@ -24,10 +29,16 @@ export class StudentProfileComponent implements OnInit {
   student!: any;
   editStudentProfileForm!:any
   student_id!:any
+  responseMessage!: any
 
 
   public setTitle(newTitle: string) {
     this.titleService.setTitle(newTitle);
+  }
+
+  public setResponseMessage(newMessage: string) {
+    this.responseMessage = newMessage;
+    this.getStudentData();
   }
 
   public getStudentData(){
@@ -85,7 +96,6 @@ export class StudentProfileComponent implements OnInit {
 
           this.getStudentData()
         }else {
-          console.log(response.error)
           Object.keys(response.error).forEach(
             // @ts-ignore
             key =>  this[key] = response.error[key][0]
@@ -131,4 +141,30 @@ export class StudentProfileComponent implements OnInit {
     })
   }
 
+  requestScanData(event:any){
+    event.preventDefault()
+    start(this.fn, this)
+  }
+
+  public fn(value:any, obj:any){
+    let formData: any = new FormData()
+    formData.append('pk', obj.student.id)
+    formData.append('rfid_code', value)
+    //@ts-ignore
+    obj.student_service.update_rfid_code(formData).subscribe(response=>{
+      if (response.success){
+        obj.setResponseMessage(response.message)
+        console.log(obj.responseMessage)
+        // @ts-ignore
+        $(".alert-success").show(200).delay(3000).hide(500);
+        // @ts-ignore
+        obj.getStudentData()
+      }else {
+        obj.setResponseMessage(response.message)
+        console.log(obj.responseMessage)
+        // @ts-ignore
+        $(".alert-danger").show(200).delay(3000).hide(500);
+      }
+    })
+  }
 }
