@@ -3,10 +3,9 @@ import {StudentService} from "../../../services/student/student.service";
 import {Title} from "@angular/platform-browser";
 import {Location} from "@angular/common";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import "../../../../assets/js/serial_script.js"
+// import "../../../../assets/js/serial_script.js"
 
 
-// @ts-ignore
 @Component({
   selector: 'app-student-profile',
   templateUrl: './student-profile.component.html',
@@ -93,7 +92,9 @@ export class StudentProfileComponent implements OnInit {
 
       this.student_service.editStudentProfile(formData).subscribe(response=>{
         if(response.success){
-
+          this.setResponseMessage(response.message)
+          // @ts-ignore
+          $(".alert-success").show(200).delay(3000).hide(500);
           this.getStudentData()
         }else {
           Object.keys(response.error).forEach(
@@ -141,30 +142,90 @@ export class StudentProfileComponent implements OnInit {
     })
   }
 
-  requestScanData(event:any){
+  public requestToScanCard(event:any){
     event.preventDefault()
-    start(this.fn, this)
+    // start(this.fn.bind(this))
+    scanner(this.updateRfidCode.bind(this))
   }
 
-  public fn(value:any, obj:any){
+
+
+  // @ts-ignore
+  public updateRfidCode(value:any){
     let formData: any = new FormData()
-    formData.append('pk', obj.student.id)
+    formData.append('pk', this.student.id)
     formData.append('rfid_code', value)
     //@ts-ignore
-    obj.student_service.update_rfid_code(formData).subscribe(response=>{
+    this.student_service.update_rfid_code(formData).subscribe(response=>{
       if (response.success){
-        obj.setResponseMessage(response.message)
-        console.log(obj.responseMessage)
+        this.setResponseMessage(response.message)
         // @ts-ignore
         $(".alert-success").show(200).delay(3000).hide(500);
         // @ts-ignore
-        obj.getStudentData()
+        this.getStudentData()
       }else {
-        obj.setResponseMessage(response.message)
-        console.log(obj.responseMessage)
+        this.setResponseMessage(response.message)
         // @ts-ignore
         $(".alert-danger").show(200).delay(3000).hide(500);
       }
     })
+  }
+
+}
+
+function scanner(fn:any) {
+  let port:any, textEncoder:any, writableStreamClosed:any, writer:any;
+  connectSerial()
+  async function connectSerial() {
+    try {
+      // @ts-ignore
+      // Prompt user to select any serial port.
+      port = await navigator.serial.requestPort();
+      await port.open({baudRate: "9600"});
+      listenToPort();
+
+      textEncoder = new TextEncoderStream();
+      writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
+
+      writer = textEncoder.writable.getWriter();
+    } catch (e) {
+      alert(e + "Serial Connection Failed");
+    }
+  }
+
+  let v = "";
+  async function listenToPort() {
+      const textDecoder = new TextDecoderStream();
+      const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
+      const reader = textDecoder.readable.getReader();
+
+      // Listen to data coming from the serial device.
+      while (true) {
+          let { value, done } = await reader.read();
+          if (done) {
+              // Allow the serial port to be closed later.
+              //reader.releaseLock();
+              break;
+          }
+          // value is a string.
+          // @ts-ignore
+        let newLine = /\r\n|\r|\n/.exec(value);
+
+          if (newLine){
+              v += value;
+              v.replace(/\r\n|\n|\r|\s/g, "")
+              if (!v.replace(/\r\n|\n|\r|\s/g, "").length) {
+                console.log("string only contains whitespace (ie. spaces, tabs or line breaks)");
+              }else {
+                  if (v.length > 3){
+                      fn(v)
+                      console.log(v)
+                  }
+              }
+              v = "";
+          }else{
+              v += value;
+          }
+      }
   }
 }

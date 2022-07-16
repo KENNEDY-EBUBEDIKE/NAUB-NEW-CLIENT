@@ -1,5 +1,5 @@
 
-function start(fn , obj){
+function start(fn){
   connectSerial()
   let port, textEncoder, writableStreamClosed, writer;
 
@@ -42,7 +42,7 @@ function start(fn , obj){
                 console.log("string only contains whitespace (ie. spaces, tabs or line breaks)");
               }else {
                   if (v.length > 3){
-                      fn(v, obj)
+                      fn(v)
                   }
               }
               v = "";
