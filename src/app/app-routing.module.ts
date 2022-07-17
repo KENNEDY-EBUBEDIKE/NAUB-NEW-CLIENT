@@ -8,6 +8,7 @@ import {StudentComponent} from "./components/student/student.component";
 import {BaseComponent} from "./components/base/base.component";
 import {LoginComponent} from "./components/login/login.component";
 import {StudentProfileComponent} from "./components/student/student-profile/student-profile.component";
+import {CourseComponent} from "./components/course/course.component";
 
 const routes: Routes = [
   {
@@ -28,6 +29,11 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardComponent
+      },
+
+      {
+        path: 'courses-database',
+        component: CourseComponent
       },
 
       {

@@ -20,6 +20,8 @@ import { RegisterStudentComponent } from './components/student/register-student/
 import {CommonModule} from "@angular/common";
 import {NO_ERRORS_SCHEMA} from "@angular/core";
 import { StudentProfileComponent } from './components/student/student-profile/student-profile.component';
+import { CourseComponent } from './components/course/course.component';
+import {CourseService} from "./services/course/course.service";
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { StudentProfileComponent } from './components/student/student-profile/st
     StudentComponent,
     RegisterStudentComponent,
     StudentProfileComponent,
+    CourseComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,6 +49,7 @@ import { StudentProfileComponent } from './components/student/student-profile/st
     SpinnerService,
     AuthService,
     StudentService,
+    CourseService,
 
     {
       provide: HTTP_INTERCEPTORS,

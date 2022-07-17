@@ -79,6 +79,9 @@ export class StudentProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.getStudentData()
+    //Initialize Select2 Elements
+    // @ts-ignore
+    $('.select2').select2()
   }
 
   public editStudentProfile(){
@@ -170,6 +173,21 @@ export class StudentProfileComponent implements OnInit {
     })
   }
 
+  public registerCourse(event:any){
+    event.preventDefault()
+    // @ts-ignore
+    let e = document.getElementById("course");
+    // @ts-ignore
+    let courses = e.options[e.selectedIndex].value;
+
+    // let formData: any = new FormData()
+    // formData.append('pk', this.student.id)
+    // formData.append('courses', courses)
+
+    console.log(courses)
+
+  }
+
 }
 
 function scanner(fn:any) {
@@ -195,6 +213,7 @@ function scanner(fn:any) {
   let v = "";
   async function listenToPort() {
       const textDecoder = new TextDecoderStream();
+      // noinspection JSUnusedLocalSymbols
       const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
       const reader = textDecoder.readable.getReader();
 

@@ -1,0 +1,67 @@
+<!--suppress TypeScriptUnresolvedVariable -->
+<app-spinner *ngIf="spinner$ | async"></app-spinner>
+<section class="content-header">
+    <h1>
+      Courses
+      <small>Courses Database</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a routerLink="/base/dashboard" href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active" routerLink="courses-database">courses-database</li>
+    </ol>
+</section>
+
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">All Courses In the Database</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <table id="example1" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Course Code</th>
+                <th>Course Title</th>
+                <th>Credit Unit</th>
+                <th>Course Type</th>
+                <th>Courses Faculty</th>
+                <th>Course Department</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let course of courses">
+                <td><a href="">{{course.course_code}}</a></td>
+                <td>{{course.course_title}}</td>
+                <td>{{course.credit_unit}}</td>
+                <td>{{course.course_type}}</td>
+                <td>{{course.course_faculty}}</td>
+                <td>{{course.course_department}}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>Course Code</th>
+                <th>Course Title</th>
+                <th>Credit Unit</th>
+                <th>Course Type</th>
+                <th>Courses Faculty</th>
+                <th>Course Department</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+
+</section>
+
+<app-register-student></app-register-student>

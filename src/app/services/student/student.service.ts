@@ -50,12 +50,24 @@ export class StudentService {
   }
 
 
-  update_rfid_code(rfid_code:any): Observable<any>{
+  update_rfid_code(formData:any): Observable<any>{
     return this.http.patch<any>(
-      SERVER_URL + "/students/update-rfid-code/", rfid_code).pipe(
+      SERVER_URL + "/students/update-rfid-code/", formData).pipe(
         tap(()=>{
           this._refreshRequired.next()
         })
     )
   }
+
+  registerCourse(formData:any): Observable<any>{
+    return this.http.post<any>(
+      SERVER_URL + "/students/register-course/", formData).pipe(
+        tap(()=>{
+          this._refreshRequired.next()
+        })
+    )
+  }
+
+
+
 }

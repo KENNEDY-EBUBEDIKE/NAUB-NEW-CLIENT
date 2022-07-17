@@ -1,39 +1,35 @@
 import {Component, OnInit, ChangeDetectorRef, AfterViewChecked} from '@angular/core';
-import {StudentService} from "../../services/student/student.service";
+import {CourseService} from "../../services/course/course.service";
 import {Title} from "@angular/platform-browser";
 import {Router} from "@angular/router";
 import {SpinnerService} from "../../services/spinner/spinner.service";
 
 
 @Component({
-  selector: 'app-student',
-  templateUrl: './student.component.html',
-  styleUrls: [
-    './student.component.css',
-  ]
+  selector: 'app-course',
+  templateUrl: './course.component.html',
+  styleUrls: ['./course.component.css']
 })
-
-export class StudentComponent implements OnInit, AfterViewChecked {
+export class CourseComponent implements OnInit, AfterViewChecked {
 
   constructor(
     private router: Router,
-    private student_service: StudentService,
+    private course_service: CourseService,
     private titleService: Title,
     public spinner: SpinnerService,
     private changeDetector: ChangeDetectorRef,
   ) {
-    this.student_service.Refreshrequired.subscribe(response=>{
-      this.getStudents();
+    this.course_service.Refreshrequired.subscribe(response=>{
+      this.getCourses();
     });
   }
 
-  title: string = "NAUB | Students Database";
-  students!: any
+  title: string = "NAUB | Courses Database";
+  courses!: any
   spinner$ = this.spinner.spinner$;
 
   ngOnInit(): void {
-    this.setTitle(this.title);
-    this.getStudents();
+    this.getCourses();
   }
 
   ngAfterViewChecked(): void {
@@ -48,11 +44,10 @@ export class StudentComponent implements OnInit, AfterViewChecked {
     this.titleService.setTitle(newTitle);
   }
 
-
-  public getStudents(){
-    this.student_service.getAllStudents().subscribe(response=>{
+  public getCourses(){
+    this.course_service.getAllCourses().subscribe(response=>{
       if(response.success){
-        this.students = response.students
+        this.courses = response.courses
         // @ts-ignore
         $(function () {
 
