@@ -169,6 +169,7 @@
                     <!-- /.tab-pane -->
 
 
+                  <!--    Courses Tab   Begin-->
 
                     <div class="tab-pane" id="courses">
                       <div class="box">
@@ -185,7 +186,9 @@
 
                         <div class="box-tools">
                           <div class="input-group input-group-sm" style="width: 150px;">
-                            <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+                            <label>
+                              <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+                            </label>
 
                             <div class="input-group-btn">
                               <a href="#add_courses" data-toggle="tab" type="button" class="btn btn-default"><i class="fa fa-search"></i></a>
@@ -234,7 +237,8 @@
                           <h4 style="font-size: 30px" >Total Units Registered <span class="badge bg-red-active" style="font-size: 35px">22</span></h4>
                       </div>
                     </div>
-                    <!-- /.tab-pane -->
+
+<!--                  End of Courses Tab-->
 
                     <div class="tab-pane" id="edit_profile">
                         <form (ngSubmit)="editStudentProfile()" [formGroup]="editStudentProfileForm" enctype="multipart/form-data" class="form-horizontal">
@@ -355,67 +359,3 @@
     </div>
 
 </section>
-
-
-<script>
-      function start(){
-        event.preventDefault()
-        connectSerial()
-        let port, textEncoder, writableStreamClosed, writer;
-
-        async function connectSerial() {
-            try {
-                // Prompt user to select any serial port.
-                port = await navigator.serial.requestPort();
-                await port.open({ baudRate: "9600" });
-                listenToPort();
-
-                textEncoder = new TextEncoderStream();
-                writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
-
-                writer = textEncoder.writable.getWriter();
-            } catch (e){
-                alert(e + "Serial Connection Failed");
-            }
-        }
-        let v = "";
-        async function listenToPort() {
-            const textDecoder = new TextDecoderStream();
-            const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
-            const reader = textDecoder.readable.getReader();
-
-            // Listen to data coming from the serial device.
-            while (true) {
-                let { value, done } = await reader.read();
-                if (done) {
-                    // Allow the serial port to be closed later.
-                    //reader.releaseLock();
-                    break;
-                }
-                // value is a string.
-                let newLine = /\r\n|\r|\n/.exec(value);
-
-                if (newLine){
-                    v += value;
-                    v.replace(/\r\n|\n|\r|\s/g, "")
-                    if (!v.replace(/\r\n|\n|\r|\s/g, "").length) {
-                      console.log("string only contains whitespace (ie. spaces, tabs or line breaks)");
-                    }else {
-                        if (v.length > 3){
-                            // makeRequest(v)
-                            console.log(v)
-                        }
-                    }
-                    v = "";
-                }else{
-                    v += value;
-                }
-            }
-        }
-        async function sendSerialLine(data) {
-            await writer.write(data);
-            //await writer.releaseLock();
-        }
-
-      }
-    </script>

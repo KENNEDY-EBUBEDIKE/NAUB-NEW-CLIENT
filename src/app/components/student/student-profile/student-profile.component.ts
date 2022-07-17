@@ -149,7 +149,6 @@ export class StudentProfileComponent implements OnInit {
   }
 
 
-
   // @ts-ignore
   public updateRfidCode(value:any){
     let formData: any = new FormData()
@@ -182,7 +181,7 @@ function scanner(fn:any) {
       // Prompt user to select any serial port.
       port = await navigator.serial.requestPort();
       await port.open({baudRate: "9600"});
-      listenToPort();
+      await listenToPort();
 
       textEncoder = new TextEncoderStream();
       writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
@@ -204,12 +203,12 @@ function scanner(fn:any) {
           let { value, done } = await reader.read();
           if (done) {
               // Allow the serial port to be closed later.
-              //reader.releaseLock();
+              reader.releaseLock();
               break;
           }
-          // value is a string.
+
           // @ts-ignore
-        let newLine = /\r\n|\r|\n/.exec(value);
+          let newLine = /\r\n|\r|\n/.exec(value);
 
           if (newLine){
               v += value;
@@ -219,7 +218,6 @@ function scanner(fn:any) {
               }else {
                   if (v.length > 3){
                       fn(v)
-                      console.log(v)
                   }
               }
               v = "";

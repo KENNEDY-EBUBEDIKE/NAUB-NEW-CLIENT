@@ -1,3 +1,4 @@
+<!--suppress TypeScriptUnresolvedVariable -->
 <app-spinner *ngIf="spinner$ | async"></app-spinner>
 <section class="content-header">
     <h1>
@@ -10,47 +11,17 @@
     </ol>
 </section>
 
-
 <section class="content">
   <div class="row">
     <div class="col-xs-12">
+
       <div class="box">
         <div class="box-header">
-          <h3 class="box-title">All Students</h3>
+          <h3 class="box-title">Data Table With Full Features</h3>
         </div>
-
         <!-- /.box-header -->
         <div class="box-body">
-          <div class="row">
-            <div class="col-sm-4">
-                <div class="dataTables_length" id="example1_length">
-                    <label> Show
-                        <select name="example1_length" aria-controls="example1" class="form-control input-sm">
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                      Entries
-                    </label>
-                </div>
-            </div>
-
-            <div class="col-sm-4">
-              <button class="btn btn-success" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#newUserModal">Add Student
-                <i class="fa fa-user-plus"></i>
-              </button>
-            </div>
-
-            <div class="col-sm-4">
-                <div id="example1_filter" class="dataTables_filter">
-                    <label>Search:
-                        <input type="search" class="form-control input-sm" placeholder="" aria-controls="example1">
-                    </label>
-                </div>
-            </div>
-        </div>
-          <table id="example2" class="table table-bordered table-striped table-hover">
+          <table id="example1" class="table table-bordered table-striped">
             <thead>
               <tr>
                 <th>Matric Number</th>
@@ -65,22 +36,21 @@
               </tr>
             </thead>
             <tbody>
-
-            <tr *ngFor="let student of students">
-              <td><a  [routerLink]="['/base/student-profile']" [state]="{ id: student.id}" href="">{{student.matric_number}}</a></td>
-              <td>{{student.surname}}</td>
-              <td>{{student.first_name}}</td>
-              <td>{{student.other_name}}</td>
-              <td>{{student.phone_number}}</td>
-              <td>{{student.email}}</td>
-              <td>{{student.faculty}}</td>
-              <td>{{student.department}}</td>
-              <td>{{student.level}}</td>
-            </tr>
+              <tr *ngFor="let student of students">
+                <td><a  [routerLink]="['/base/student-profile']" [state]="{ id: student.id}" href="">{{student.matric_number}}</a></td>
+                <td>{{student.surname}}</td>
+                <td>{{student.first_name}}</td>
+                <td>{{student.other_name}}</td>
+                <td>{{student.phone_number}}</td>
+                <td>{{student.email}}</td>
+                <td>{{student.faculty}}</td>
+                <td>{{student.department}}</td>
+                <td>{{student.level}}</td>
+              </tr>
             </tbody>
             <tfoot>
-            <tr>
-              <th>Matric Number</th>
+              <tr>
+                <th>Matric Number</th>
                 <th>Surname</th>
                 <th>First Name</th>
                 <th>Other Name</th>
@@ -89,7 +59,7 @@
                 <th>Faculty</th>
                 <th>Department</th>
                 <th>Level</th>
-            </tr>
+              </tr>
             </tfoot>
           </table>
         </div>
@@ -100,24 +70,6 @@
     <!-- /.col -->
   </div>
   <!-- /.row -->
-  </section>
-
+</section>
 
 <app-register-student></app-register-student>
-
-<script src="../../../assets/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="../../../assets/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="../../../assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-<script>
-  $(function () {
-    $('#example1').DataTable()
-    $('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
-    })
-  })
-</script>

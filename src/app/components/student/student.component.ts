@@ -54,6 +54,22 @@ export class StudentComponent implements OnInit, AfterViewChecked {
     this.student_service.getAllStudents().subscribe(response=>{
       if(response.success){
         this.students = response.students
+        // @ts-ignore
+        $(function () {
+
+          // @ts-ignore
+          $('#example1').DataTable()
+
+          // @ts-ignore
+          $('#example2').DataTable({
+            'paging'      : true,
+            'lengthChange': false,
+            'searching'   : false,
+            'ordering'    : true,
+            'info'        : true,
+            'autoWidth'   : false
+          })
+        })
       }
     })
   }
