@@ -18,10 +18,6 @@ export class CourseService {
 
     private _refreshRequired = new Subject<void>();
 
-    get Refreshrequired(){
-      return this._refreshRequired;
-    }
-
   constructor(private http: HttpClient) { }
 
 
@@ -37,5 +33,23 @@ export class CourseService {
         })
     )
   }
+
+  getCourseInfo(courseId:any): Observable<any> {
+    return this.http.get(SERVER_URL + '/course/get-course/' + courseId, httpOptions);
+  }
+
+  deleteCourse(courseId:any): Observable<any> {
+    return this.http.delete(SERVER_URL + '/course/get-course/' + courseId, httpOptions);
+  }
+
+  editCourse(formData:any, courseId:any): Observable<any>{
+    return this.http.patch<any>(
+      SERVER_URL + "/course/get-course/" + courseId, formData).pipe(
+        tap(()=>{
+          this._refreshRequired.next()
+        })
+    )
+  }
+
 
 }

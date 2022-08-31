@@ -12,12 +12,22 @@
 </section>
 
 <section class="content">
+
+  <div class="alert alert-success alert-dismissible" hidden>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <h4><i class="icon fa fa-ban"></i> Successful!</h4>
+    {{responseMessage}}
+  </div>
+
   <div class="row">
     <div class="col-xs-12">
 
       <div class="box">
         <div class="box-header">
           <h3 class="box-title">All Courses In the Database</h3>
+          <button style="margin-left: 30%" class="btn btn-success" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#newCourseModal">Add Course
+              <i class="fa fa-user-plus"></i>
+          </button>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -30,16 +40,37 @@
                 <th>Course Type</th>
                 <th>Courses Faculty</th>
                 <th>Course Department</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let course of courses">
-                <td><a href="">{{course.course_code}}</a></td>
+                <td>{{course.course_code}}</td>
                 <td>{{course.course_title}}</td>
                 <td>{{course.credit_unit}}</td>
                 <td>{{course.course_type}}</td>
                 <td>{{course.course_faculty}}</td>
                 <td>{{course.course_department}}</td>
+                <td>
+                  <div class="btn-group">
+                  <button type="button" class="btn btn-success">Action</button>
+                  <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li>
+                      <a href="#" (click)="getCourseInfo(course.id, $event)" >Edit</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
+                      Delete
+                      </button>
+                    </li>
+<!--                    <li> <a href="#" (click)="deleteCourse(course.id, $event)" >Delete</a></li>-->
+                  </ul>
+                </div>
+                </td>
               </tr>
             </tbody>
             <tfoot>
@@ -50,6 +81,7 @@
                 <th>Course Type</th>
                 <th>Courses Faculty</th>
                 <th>Course Department</th>
+                <th>Action</th>
               </tr>
             </tfoot>
           </table>
@@ -61,7 +93,196 @@
     <!-- /.col -->
   </div>
   <!-- /.row -->
-
 </section>
 
-<app-register-student></app-register-student>
+
+<div class="modal fade" id="newCourseModal" tabindex="-1" role="dialog" aria-labelledby="newCourseModalLabel" aria-hidden="true">
+  <app-spinner *ngIf="spinner$ | async"></app-spinner>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Course</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form role="form" (submit)="addNewCourse()" [formGroup]="courseAddForm" enctype="multipart/form-data">
+        <div class="box-body">
+
+          <div class="form-group">
+            <label for="course_title">Course Title</label>
+            <input type="text" class="form-control" formControlName="course_title" id="course_title" placeholder="Enter Course Title">
+            <div *ngIf="err_course_title" class="invalid-feedback" style="color: red" >{{err_course_title}}</div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-xs-3">
+              <label for="course_code">Course Code</label>
+              <input type="text" class="form-control" formControlName="course_code" id="course_code" placeholder="Enter Course Code">
+              <div *ngIf="err_course_code" class="invalid-feedback" style="color: #ff0000" >{{err_course_code}}</div>
+              <div *ngIf="courseAddForm.controls['course_code'].invalid" class="invalid-feedback" style="color: #ff0000" >Please Enter a Valid Course Code</div>
+            </div>
+
+            <div class="form-group col-xs-3">
+              <label for="credit_unit">Credit Unit</label>
+              <select style="width: 100%;" class="form-control" formControlName="credit_unit" id="credit_unit" placeholder="Enter Credit Unit">
+                <option value="0">0 Unit</option>
+                <option value="1">1 Unit</option>
+                <option value="2">2 Unit</option>
+                <option value="3">3 Unit</option>
+                <option value="4">4 Unit</option>
+                <option value="6">6 Unit</option>
+              </select>
+              <div *ngIf="err_credit_unit" class="invalid-feedback" style="color: red" >{{err_credit_unit}}</div>
+            </div>
+
+            <div class="form-group col-xs-6">
+              <label for="course_type">Course Type</label>
+              <select style="width: 100%;" class="form-control" formControlName="course_type" id="course_type" placeholder="Enter Course Type">
+                <option value="COMPULSORY"> COMPULSORY </option>
+                <option value="REQUIRED"> REQUIRED </option>
+                <option value="ELECTIVE"> ELECTIVE </option>
+              </select>
+              <div *ngIf="err_course_type" class="invalid-feedback" style="color: red" >{{err_course_type}}</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="course_faculty">Course Faculty</label>
+
+            <select style="width: 100%;" class="form-control" formControlName="course_faculty" id="course_faculty">
+              <option  *ngFor="let fac of faculties" [value]="fac.value">
+                {{fac.viewValue}}
+              </option>
+            </select>
+          </div>
+
+
+          <div class="form-group">
+            <label for="course_department">Course Department</label>
+            <input type="text" class="form-control" formControlName="course_department" id="course_department" placeholder="Enter Department">
+          </div>
+
+        </div>
+        <!-- /.box-body -->
+
+        <div class="box-footer">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+<!--        <button type="button" class="btn btn-primary">Send message</button>-->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="editCourseModal" tabindex="-1" role="dialog" aria-labelledby="editCourseModalLabel" aria-hidden="true">
+  <app-spinner *ngIf="spinner$ | async"></app-spinner>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editCourseModalLabel">Edit Course</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form role="form" (submit)="editCourse(courseInView.id)" [formGroup]="courseEditForm" enctype="multipart/form-data">
+        <div class="box-body">
+
+          <div class="form-group">
+            <label for="course_title">Course Title</label>
+            <input type="text" class="form-control" formControlName="course_title" id="edit_course_title" placeholder="Enter Course Title">
+            <div *ngIf="err_course_title" class="invalid-feedback" style="color: red" >{{err_course_title}}</div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-xs-3">
+              <label for="course_code">Course Code</label>
+              <input type="text" class="form-control" formControlName="course_code" id="edit_course_code" placeholder="Enter Course Code">
+              <div *ngIf="err_course_code" class="invalid-feedback" style="color: #ff0000" >{{err_course_code}}</div>
+              <div *ngIf="courseEditForm.controls['course_code'].invalid" class="invalid-feedback" style="color: #ff0000" >Please Enter a Valid Course Code</div>
+            </div>
+
+            <div class="form-group col-xs-3">
+              <label for="credit_unit">Credit Unit</label>
+              <select style="width: 100%;" class="form-control" formControlName="credit_unit" id="edit_credit_unit" placeholder="Enter Credit Unit">
+                <option value="0">0 Unit</option>
+                <option value="1">1 Unit</option>
+                <option value="2">2 Unit</option>
+                <option value="3">3 Unit</option>
+                <option value="4">4 Unit</option>
+                <option value="6">6 Unit</option>
+              </select>
+              <div *ngIf="err_credit_unit" class="invalid-feedback" style="color: red" >{{err_credit_unit}}</div>
+            </div>
+
+            <div class="form-group col-xs-6">
+              <label for="course_type">Course Type</label>
+              <select style="width: 100%;" class="form-control" formControlName="course_type" id="edit_course_type" placeholder="Enter Course Type">
+                <option value="COMPULSORY"> COMPULSORY </option>
+                <option value="REQUIRED"> REQUIRED </option>
+                <option value="ELECTIVE"> ELECTIVE </option>
+              </select>
+              <div *ngIf="err_course_type" class="invalid-feedback" style="color: red" >{{err_course_type}}</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="course_faculty">Course Faculty</label>
+
+            <select style="width: 100%;" class="form-control" formControlName="course_faculty" id="edit_course_faculty">
+              <option  *ngFor="let fac of faculties" [value]="fac.value">
+                {{fac.viewValue}}
+              </option>
+            </select>
+          </div>
+
+
+          <div class="form-group">
+            <label for="course_department">Course Department</label>
+            <input type="text" class="form-control" formControlName="course_department" id="edit_course_department" placeholder="Enter Department">
+          </div>
+
+        </div>
+        <!-- /.box-body -->
+
+        <div class="box-footer">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+<!--        <button type="button" class="btn btn-primary">Send message</button>-->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal modal-danger fade" id="confirmDeleteModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Delete Course</h4>
+      </div>
+      <div class="modal-body">
+        <p>You are about to delete a course</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline" (click)="deleteCourse(4)" >Confirm</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>

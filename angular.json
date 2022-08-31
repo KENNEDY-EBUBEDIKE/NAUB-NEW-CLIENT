@@ -29,7 +29,10 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": ["src/assets/js/serial_script.js"]
+            "scripts": [
+              "src/assets/js/serial_script.js",
+              "src/assets/bower_components/select2/dist/js/select2.full.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -96,7 +99,10 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": ["src/assets/js/serial_script.js"]
+            "scripts": [
+              "src/assets/js/serial_script.js",
+              "src/assets/bower_components/select2/dist/js/select2.full.min.js"
+            ]
           }
         }
       }
