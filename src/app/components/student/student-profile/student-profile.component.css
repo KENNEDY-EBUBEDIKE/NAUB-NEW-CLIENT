@@ -1,0 +1,26 @@
+.delete-item{
+  display: flex;
+  flex-direction: row;
+}
+
+.delete-item img{
+    display: none;
+    vertical-align: middle;
+    line-height: 1;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+.delete-item span{
+    padding-top: 5px;
+}
+
+.delete-item:hover span{
+    transform: translateX(15px);
+    transition:  transform 0.4s;
+}
+
+.delete-item:hover img{
+    display: inline-block;
+}

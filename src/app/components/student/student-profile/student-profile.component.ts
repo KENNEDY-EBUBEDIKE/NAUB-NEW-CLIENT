@@ -3,6 +3,7 @@ import {StudentService} from "../../../services/student/student.service";
 import {Title} from "@angular/platform-browser";
 import {Location} from "@angular/common";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {CourseService} from "../../../services/course/course.service";
 // import "../../../../assets/js/serial_script.js"
 
 
@@ -16,6 +17,7 @@ export class StudentProfileComponent implements OnInit {
 
   constructor(
     private student_service: StudentService,
+    private course_service: CourseService,
     private location: Location,
     private titleService: Title,
 
@@ -29,6 +31,9 @@ export class StudentProfileComponent implements OnInit {
   editStudentProfileForm!:any
   student_id!:any
   responseMessage!: any
+  courses!: any
+  StudentRegisteredCourses!:any
+
 
 
   public setTitle(newTitle: string) {
@@ -79,6 +84,7 @@ export class StudentProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.getStudentData()
+    this.getCourses()
     //Initialize Select2 Elements
     // @ts-ignore
     $('.select2').select2()
@@ -173,18 +179,63 @@ export class StudentProfileComponent implements OnInit {
     })
   }
 
+  public getCourses(){
+    this.course_service.getAllCourses().subscribe(response=>{
+      if(response.success){
+        this.courses = response.courses
+
+      }
+    })
+  }
+
   public registerCourse(event:any){
     event.preventDefault()
     // @ts-ignore
     let e = document.getElementById("course");
     // @ts-ignore
-    let courses = e.options[e.selectedIndex].value;
+    let courses = Array.from(e.selectedOptions).map(option => option.value)
 
-    // let formData: any = new FormData()
-    // formData.append('pk', this.student.id)
-    // formData.append('courses', courses)
+    let formData: any = new FormData()
+    formData.append('pk', this.student.id)
+    formData.append('courses', courses)
 
-    console.log(courses)
+    this.student_service.registerCourse(formData).subscribe(response=>{
+      this.setResponseMessage(response.message)
+      // @ts-ignore
+        $('#registerCourseModal').modal('hide');
+      if (response.success){
+        // @ts-ignore
+        $(".alert-success").show(200).delay(3000).hide(500);
+
+      }else {
+        // @ts-ignore
+        $(".alert-danger").show(200).delay(3000).hide(500);
+      }
+
+      })
+
+  }
+
+  public deRegisterCourse(event:any, courseCode:any){
+    event.preventDefault()
+    console.log(courseCode)
+
+    let formData: any = new FormData()
+    formData.append('pk', this.student.id)
+    formData.append('course', courseCode)
+
+    this.student_service.deRegisterCourse(formData).subscribe(response=>{
+      this.setResponseMessage(response.message)
+      if (response.success){
+        // @ts-ignore
+        $(".alert-success").show(200).delay(3000).hide(500);
+      }else {
+        // @ts-ignore
+        $(".alert-danger").show(200).delay(3000).hide(500);
+      }
+
+      })
+
 
   }
 

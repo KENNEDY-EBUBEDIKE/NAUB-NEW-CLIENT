@@ -96,7 +96,7 @@
                                 <h4 class="timeline-header"><a href="#">Other Name:</a> <span class="time-label ">{{student.other_name}}</span></h4>
                               </div>
                               <div class="timeline-footer">
-                                <a class="btn btn-primary btn-xs">Read more</a>
+                                <a class="btn btn-primary btn-xs">View more</a>
                                 <a class="btn btn-danger btn-xs">Delete</a>
                               </div>
                             </div>
@@ -133,7 +133,7 @@
                                 <h4 class="timeline-header"><a href="#">Residential Address:</a> <span class="time-label ">{{student.resident_address}}</span></h4>
                               </div>
                               <div class="timeline-footer">
-                                <a class="btn btn-warning btn-flat btn-xs">View comment</a>
+                                <a class="btn btn-warning btn-flat btn-xs">More Details</a>
                               </div>
                             </div>
                           </li>
@@ -208,33 +208,28 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr>
-                              <td>EEE 211</td>
-                              <td>3</td>
-                              <td>11-7-2014</td>
-                              <td><span class="label label-success">Elective</span></td>
-                              <td>APPLIED ELECTRICITY</td>
+
+                            <tr *ngFor="let rc of student.courses">
+                              <td class="delete-item">
+                                <img src="./assets/dist/img/close.svg" width="30px" alt="" (click)="deRegisterCourse($event, 'EEE321')">
+                                <span>{{rc.course_code}}</span>
+                              </td>
+                              <td>{{rc.credit_unit}}</td>
+                              <td>11-7-2022</td>
+                              <td>
+                                <span *ngIf="rc.course_type == 'ELECTIVE'" class="label label-success">Elective</span>
+                                <span *ngIf="rc.course_type == 'REQUIRED'" class="label label-warning">Required</span>
+                                <span *ngIf="rc.course_type == 'COMPULSORY'" class="label label-danger">Compulsory</span>
+                              </td>
+                              <td>{{rc.course_title}}</td>
                             </tr>
-                            <tr>
-                              <td>MEE 211</td>
-                              <td>2</td>
-                              <td>11-7-2014</td>
-                              <td><span class="label label-warning">Required</span></td>
-                              <td>ENGINEERING MECHANICS</td>
-                            </tr>
-                            <tr>
-                              <td>CEE 211</td>
-                              <td>2</td>
-                              <td>11-7-2014</td>
-                              <td><span class="label label-danger">Compulsory</span></td>
-                              <td>STRENGTH OF MAATERIALS</td>
-                            </tr>
+
                           </tbody>
                         </table>
                       </div>
                       </div>
                       <div class="text-center text-bold">
-                          <h4 style="font-size: 30px" >Total Units Registered <span class="badge bg-red-active" style="font-size: 35px">22</span></h4>
+                          <h4 style="font-size: 30px" >Total Units Registered <span class="badge bg-red-active" style="font-size: 35px">{{student.total_registered_units}}</span></h4>
                       </div>
                     </div>
 
@@ -374,17 +369,14 @@
                 <label for="course">Select Courses</label>
                 <select id="course"class="form-control select2" multiple="multiple" data-placeholder="Select a Course"
                         style="width: 100%;">
-                  <option value="CSC 211">CSC 211</option>
-                  <option value="SWE 324">SWE 324</option>
-                  <option value="EEE 412">EEE 412</option>
-                  <option value="CHM 111">CHM 111</option>
+                  <option *ngFor="let course of courses" value="{{course.course_code}}">{{course.course_code}}</option>
                 </select>
               </div>
             </div>
             <!-- /.box-body -->
 
             <div class="box-footer">
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="btn btn-primary">Register</button>
             </div>
           </form>
           </div>

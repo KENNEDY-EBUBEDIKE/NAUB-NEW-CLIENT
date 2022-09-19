@@ -68,6 +68,15 @@ export class StudentService {
     )
   }
 
+  deRegisterCourse(formData:any): Observable<any>{
+    return this.http.post<any>(
+      SERVER_URL + "/students/de-register-course/", formData).pipe(
+        tap(()=>{
+          this._refreshRequired.next()
+        })
+    )
+  }
+
 
 
 }
