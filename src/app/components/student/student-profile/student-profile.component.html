@@ -211,7 +211,7 @@
 
                             <tr *ngFor="let rc of student.courses">
                               <td class="delete-item">
-                                <img src="./assets/dist/img/close.svg" width="30px" alt="" (click)="deRegisterCourse($event, 'EEE321')">
+                                <img src="./assets/dist/img/close.svg" width="30px" alt="" (click)="deRegisterCourse($event, rc.course_code)">
                                 <span>{{rc.course_code}}</span>
                               </td>
                               <td>{{rc.credit_unit}}</td>

@@ -142,14 +142,28 @@ export class CourseComponent implements OnInit, AfterViewChecked {
     event.preventDefault()
     this.course_service.getCourseInfo(course_id).subscribe(response=>{
       this.courseInView = response.course
-      console.log(this.courseInView.course_title)
-      // @ts-ignore
-      $('#editCourseModal').modal('show');
+      this.courseEditForm = new FormGroup({
+        course_title: new FormControl(this.courseInView?.course_title?this.courseInView.course_title: ''),
+        course_code: new FormControl(this.courseInView?.course_code?this.courseInView.course_code: '', Validators.compose([Validators.required, Validators.minLength(3)])),
+        credit_unit: new FormControl(this.courseInView?.credit_unit?this.courseInView.credit_unit: ''),
+        course_type: new FormControl(this.courseInView?.course_type?this.courseInView.course_type: ''),
+        course_faculty: new FormControl(this.courseInView?.course_faculty?this.courseInView.course_faculty: ''),
+        course_department: new FormControl(this.courseInView?.course_department?this.courseInView.course_department: ''),
+      });
     })
   }
 
-  public deleteCourse(course_id:any){
+  public deleteCourseHelper(course_id:any){
+    // @ts-ignore
+      $("#c_id").html(course_id);
+  }
+
+  public deleteCourse(){
+    // @ts-ignore
+    let course_id = $("#c_id").html();
     this.course_service.deleteCourse(course_id).subscribe(response=>{
+      // @ts-ignore
+      $('#confirmDeleteModal').modal('hide');
       this.responseMessage = response.message
       this.getCourses()
       // @ts-ignore
@@ -170,7 +184,7 @@ export class CourseComponent implements OnInit, AfterViewChecked {
         if(response.success){
           this.responseMessage = response.message
           // @ts-ignore
-          $('#newCourseModal').modal('hide');
+          $('#editCourseModal').modal('hide');
           this.getCourses()
           // @ts-ignore
           $(".alert-success").show(200).delay(3000).hide(500);

@@ -213,7 +213,6 @@ export class StudentProfileComponent implements OnInit {
       }
 
       })
-
   }
 
   public deRegisterCourse(event:any, courseCode:any){

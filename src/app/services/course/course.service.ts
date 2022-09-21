@@ -44,7 +44,7 @@ export class CourseService {
 
   editCourse(formData:any, courseId:any): Observable<any>{
     return this.http.patch<any>(
-      SERVER_URL + "/course/get-course/" + courseId, formData).pipe(
+      SERVER_URL + "/course/get-course/" + courseId + '/', formData).pipe(
         tap(()=>{
           this._refreshRequired.next()
         })

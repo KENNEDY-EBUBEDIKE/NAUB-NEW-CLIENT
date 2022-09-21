@@ -60,10 +60,10 @@
                   </button>
                   <ul class="dropdown-menu" role="menu">
                     <li>
-                      <a href="#" (click)="getCourseInfo(course.id, $event)" >Edit</a>
+                      <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editCourseModal" (click)="getCourseInfo(course.id, $event)" >Edit</button>
                     </li>
                     <li class="divider"></li>
-                    <li> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
+                    <li> <button type="button" (click)="deleteCourseHelper(course.id)" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
                       Delete
                       </button>
                     </li>
@@ -275,11 +275,11 @@
         <h4 class="modal-title">Delete Course</h4>
       </div>
       <div class="modal-body">
-        <p>You are about to delete a course</p>
+        <p>You are about to delete a course <span id="c_id" hidden></span></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-outline" (click)="deleteCourse(4)" >Confirm</button>
+        <button type="button" class="btn btn-outline" (click)="deleteCourse()" >Confirm</button>
       </div>
     </div>
     <!-- /.modal-content -->
