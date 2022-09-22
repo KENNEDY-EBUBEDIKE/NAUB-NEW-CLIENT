@@ -22,6 +22,7 @@ import {NO_ERRORS_SCHEMA} from "@angular/core";
 import { StudentProfileComponent } from './components/student/student-profile/student-profile.component';
 import { CourseComponent } from './components/course/course.component';
 import {CourseService} from "./services/course/course.service";
+import { SecurityComponent } from './components/security/security.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import {CourseService} from "./services/course/course.service";
     RegisterStudentComponent,
     StudentProfileComponent,
     CourseComponent,
+    SecurityComponent,
   ],
   imports: [
     BrowserModule,

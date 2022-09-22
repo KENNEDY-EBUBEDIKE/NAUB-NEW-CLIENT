@@ -240,7 +240,7 @@ export class StudentProfileComponent implements OnInit {
 
 }
 
-function scanner(fn:any) {
+export function scanner(fn:any) {
   let port:any, textEncoder:any, writableStreamClosed:any, writer:any;
   connectSerial()
   async function connectSerial() {

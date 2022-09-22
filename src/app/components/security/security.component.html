@@ -1,0 +1,71 @@
+<app-spinner *ngIf="spinner$ | async"></app-spinner>
+<div [ngClass]="card_owner?.is_flaged? 'red-bg':  'gray-bg'" class="row" style="padding-left: 15px; ">
+  <a href="" type="button" style="margin-left:10px; margin-top: 10px; " class="btn btn-success"> <span class="fa fa-long-arrow-left" style="margin-right: 3px"></span>Back</a>
+  <button id="scanBtn" (click)="requestToScanCard($event)" style="margin-left:10px; margin-top: 10px; " class="btn btn-warning"> <span class="fa fa fa-credit-card" style="margin-right: 5px"></span>Start Scan</button>
+</div>
+<section [ngClass]="card_owner?.is_flaged? 'red-bg':  'gray-bg'" class="section about-section" id="about">
+    <div class="container">
+        <div class="row align-items-center flex-row-reverse">
+            <div class="col-lg-6">
+                <div class="about-text go-to">
+                    <h1 class="dark-color" id="names">{{card_owner?.surname? card_owner.surname:"Surname"}} </h1>
+                    <h1 class="dark-color"> {{card_owner?.first_name? card_owner.first_name:"First Name"}}  {{card_owner?.other_name? card_owner.other_name:"Other Name"}}</h1>
+                    <h4 class="theme-color lead"> STUDENT </h4>
+                    <div class="row about-list">
+                        <div class="col-md-6">
+                            <div class="media">
+                                <label>Faculty</label>
+                                <p id="faculty">{{card_owner?.faculty? card_owner.faculty: "Faculty"}}</p>
+                            </div>
+                            <div class="media">
+                                <label>Gender</label>
+                                <p id="gender">{{card_owner?.gender? card_owner.gender: 'Gender'}}</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="media">
+                                <label>E-mail</label>
+                                <p id="email">{{card_owner?.email? card_owner.email: 'info@domain.com'}}</p>
+                            </div>
+                            <div class="media">
+                                <label>Phone</label>
+                                <p id="phone_number">{{card_owner?.phone_number? card_owner.phone_number: '08012345678'}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="card_owner.is_flaged" class="row about-list" >
+                      <h2 class="flag-text">This Student is Flagged For {{card_owner.is_flaged}} Reason</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-avatar">
+                    <img id="photo" width="550px" src="https://bootdey.com/img/Content/avatar/avatar7.png" title="" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="counter">
+            <div class="row">
+                <div class="col-6 col-lg-3">
+                    <div class="count-data text-center">
+                        <h1 id="matric_number" class="count h2" data-to="500" data-speed="500">{{card_owner?.matric_number? card_owner.matric_number:"NAUB/00/00"}}</h1>
+                        <p class="m-0px font-w-600">Matric Number</p>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-6">
+                    <div class="count-data text-center">
+                        <h1 id="department" class="count h2" data-to="150" data-speed="150">{{card_owner?.department? card_owner.department:"Department"}}</h1>
+                        <p class="m-0px font-w-600">Department</p>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="count-data text-center">
+                        <h1 id="level" class="count h2" data-to="850" data-speed="100">{{card_owner?.level? card_owner.level:"Level"}}</h1>
+                        <p class="m-0px font-w-600">Level</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

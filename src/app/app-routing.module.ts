@@ -9,6 +9,7 @@ import {BaseComponent} from "./components/base/base.component";
 import {LoginComponent} from "./components/login/login.component";
 import {StudentProfileComponent} from "./components/student/student-profile/student-profile.component";
 import {CourseComponent} from "./components/course/course.component";
+import {SecurityComponent} from "./components/security/security.component";
 
 const routes: Routes = [
   {
@@ -46,6 +47,11 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+
+  {
+    path: 'security-scan',
+    component: SecurityComponent
   },
 
 
