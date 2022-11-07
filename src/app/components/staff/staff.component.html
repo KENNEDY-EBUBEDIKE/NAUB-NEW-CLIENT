@@ -1,0 +1,79 @@
+<!--suppress TypeScriptUnresolvedVariable -->
+<app-spinner *ngIf="spinner$ | async"></app-spinner>
+<section class="content-header">
+    <h1>
+      Staff
+      <small>Staff Database</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a routerLink="/base/dashboard" href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active" routerLink="staff-database">staff database</li>
+    </ol>
+</section>
+
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">All Staff in the Database</h3>
+          <button style="margin-left: 30%" class="btn btn-success" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#newUserModal">Add Staff
+              <i class="fa fa-user-plus"></i>
+          </button>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <table id="example1" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Staff ID Number</th>
+                <th>Surname</th>
+                <th>First Name</th>
+                <th>Other Name</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Unit</th>
+                <th>Department</th>
+                <th>Level</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let staff of allStaff">
+                <td><a  [routerLink]="['/base/student-profile']" [state]="{ id: staff.id}" href="">{{staff.staff_id}}</a></td>
+                <td>{{staff.surname}}</td>
+                <td>{{staff.first_name}}</td>
+                <td>{{staff.other_name}}</td>
+                <td>{{staff.phone_number}}</td>
+                <td>{{staff.email}}</td>
+                <td>{{staff.unit}}</td>
+                <td>{{staff.department}}</td>
+                <td>{{staff.level}}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>Staff ID Number</th>
+                <th>Surname</th>
+                <th>First Name</th>
+                <th>Other Name</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Unit</th>
+                <th>Department</th>
+                <th>Level</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+
+</section>
+
+<app-register-staff></app-register-staff>

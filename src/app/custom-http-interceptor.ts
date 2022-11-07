@@ -12,7 +12,7 @@ export class CustomHttpInterceptor implements HttpInterceptor{
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    // implement anything we want here before sending the request to the server
+    // implement anything i want here before sending the request to the server
 
     let authReq = req;
     const token = this.token.getToken();

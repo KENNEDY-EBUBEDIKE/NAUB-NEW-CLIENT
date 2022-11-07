@@ -10,6 +10,7 @@ import {LoginComponent} from "./components/login/login.component";
 import {StudentProfileComponent} from "./components/student/student-profile/student-profile.component";
 import {CourseComponent} from "./components/course/course.component";
 import {SecurityComponent} from "./components/security/security.component";
+import {StaffComponent} from "./components/staff/staff.component";
 
 const routes: Routes = [
   {
@@ -40,6 +41,10 @@ const routes: Routes = [
       {
         path: 'student-profile',
         component: StudentProfileComponent,
+      },
+      {
+        path: 'staff-database',
+        component: StaffComponent,
       },
     ]
   },

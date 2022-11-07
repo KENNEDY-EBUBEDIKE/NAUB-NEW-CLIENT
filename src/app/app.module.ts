@@ -23,6 +23,8 @@ import { StudentProfileComponent } from './components/student/student-profile/st
 import { CourseComponent } from './components/course/course.component';
 import {CourseService} from "./services/course/course.service";
 import { SecurityComponent } from './components/security/security.component';
+import { StaffComponent } from './components/staff/staff.component';
+import { RegisterStaffComponent } from './components/staff/register-staff/register-staff.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import { SecurityComponent } from './components/security/security.component';
     StudentProfileComponent,
     CourseComponent,
     SecurityComponent,
+    StaffComponent,
+    RegisterStaffComponent,
   ],
   imports: [
     BrowserModule,
